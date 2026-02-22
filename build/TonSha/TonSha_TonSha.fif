@@ -1,0 +1,556 @@
+// automatically generated from `@stdlib/std/stdlib.fc` `/home/arhant/Development/ton-sha/build/TonSha/TonSha_TonSha.fc` 
+PROGRAM{
+  DECLPROC __tact_not_null
+  DECLPROC __tact_context_get_sender
+  DECLPROC __tact_dict_get_int_int
+  DECLPROC __tact_dict_set_int_int
+  DECLPROC $VerificationPassed$_store
+  DECLPROC $VerificationPassed$_store_cell
+  DECLPROC $VerificationFailed$_store
+  DECLPROC $VerificationFailed$_store_cell
+  DECLPROC $TonSha$_store
+  DECLPROC $TonSha$_load
+  DECLPROC $TonSha$init$_load
+  DECLPROC $TonSha$_contract_init
+  DECLPROC $TonSha$_contract_load
+  DECLPROC $TonSha$_contract_store
+  DECLPROC $global_emit
+  DECLPROC $TonSha$_fun_computeDigest
+  DECLPROC $TonSha$_fun_isAuthorized
+  DECLPROC $TonSha$_fun_isApprovedFirmware
+  DECLPROC $TonSha$_fun_getCounter
+  DECLPROC $TonSha$_fun_getOwner
+  DECLPROC $VerificationFailed$_constructor_hw_id_reason
+  DECLPROC $VerificationPassed$_constructor_hw_id_counter
+  104516 DECLMETHOD %isAuthorized
+  118957 DECLMETHOD %isApprovedFirmware
+  103307 DECLMETHOD %getCounter
+  102025 DECLMETHOD %getOwner
+  DECLPROC recv_internal
+  65535 DECLMETHOD __tact_selector_hack
+  DECLGLOBVAR __tact_context
+  DECLGLOBVAR __tact_context_sender
+  DECLGLOBVAR __tact_child_contract_codes
+  DECLGLOBVAR __tact_randomized
+  __tact_not_null PROCINLINE:<{
+    DUP
+    ISNULL
+    128 THROWIF
+  }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
+  __tact_dict_get_int_int PROCINLINE:<{
+    s1 s3 s3 XCHG3
+    DICTIGET
+    NULLSWAPIFNOT
+    IF:<{
+      SWAP
+      LDIX
+      DROP
+    }>ELSE<{
+      2DROP
+      PUSHNULL
+    }>
+  }>
+  __tact_dict_set_int_int PROCINLINE:<{
+    OVER
+    ISNULL
+    IF:<{
+      2DROP
+      -ROT
+      DICTIDEL
+      DROP
+    }>ELSE<{
+      NEWC
+      SWAP
+      STIX
+      s1 s3 s3 XCHG3
+      DICTISETB
+    }>
+  }>
+  $VerificationPassed$_store PROCINLINE:<{
+    3953073877 PUSHINT
+    s0 s3 XCHG2
+    32 STU
+    64 STU
+    64 STU
+  }>
+  $VerificationPassed$_store_cell PROCINLINE:<{
+    -ROT
+    $VerificationPassed$_store INLINECALLDICT
+    ENDC
+  }>
+  $VerificationFailed$_store PROCINLINE:<{
+    2460458340 PUSHINT
+    s0 s3 XCHG2
+    32 STU
+    64 STU
+    8 STU
+  }>
+  $VerificationFailed$_store_cell PROCINLINE:<{
+    -ROT
+    $VerificationFailed$_store INLINECALLDICT
+    ENDC
+  }>
+  $TonSha$_store PROCINLINE:<{
+    s3 s4 XCHG2
+    STSLICE
+    STDICT
+    SWAP
+    NEWC
+    STDICT
+    s1 s2 XCHG
+    STDICT
+    STBREFR
+  }>
+  $TonSha$_load PROCINLINE:<{
+    LDMSGADDR
+    LDDICT
+    LDREF
+    SWAP
+    CTOS
+    LDDICT
+    LDDICT
+    DROP
+    s2 s4 XCHG
+    s2 s3 XCHG
+  }>
+  $TonSha$init$_load PROCINLINE:<{
+    LDMSGADDR
+    SWAP
+  }>
+  $TonSha$_contract_init PROCINLINE:<{
+    PUSHNULL
+    PUSHNULL
+    PUSHNULL
+  }>
+  $TonSha$_contract_load PROCINLINE:<{
+    c4 PUSH
+    CTOS
+    1 LDI
+    SWAP
+    IF:<{
+      $TonSha$_load INLINECALLDICT
+      1 4 BLKDROP2
+    }>ELSE<{
+      $TonSha$init$_load INLINECALLDICT
+      SWAP
+      ENDS
+      $TonSha$_contract_init INLINECALLDICT
+    }>
+  }>
+  $TonSha$_contract_store PROCINLINE:<{
+    NEWC
+    TRUE
+    SWAP
+    1 STI
+    4 -ROLL
+    $TonSha$_store INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  $global_emit PROCINLINE:<{
+        NEWC
+    15211807202738752817960438464513 PUSHINT
+    SWAP
+    104 STU
+        STREF
+        ENDC
+    0 PUSHINT
+        SENDRAWMSG
+  }>
+  $TonSha$_fun_computeDigest PROCREF:<{
+        NEWC
+    s1 s4 XCHG
+    64 STU
+    s1 s2 XCHG
+    256 STU
+    256 STU
+    64 STU
+        ENDC
+        CTOS
+                <{
+                    <{ DUP SREFS }> PUSHCONT
+                    <{ LDREFRTOS }> PUSHCONT
+                    WHILE
+                    DEPTH
+                    HASHEXT_SHA256
+                }> PUSHCONT
+                1 1 CALLXARGS
+  }>
+  $TonSha$_fun_isAuthorized PROCREF:<{
+    257 PUSHINT
+    s4 PUSH
+    s0 s2 XCHG
+    1 PUSHINT
+    __tact_dict_get_int_int INLINECALLDICT
+    DUP
+    ISNULL
+    IFJMP:<{
+      DROP
+      FALSE
+    }>
+    __tact_not_null INLINECALLDICT
+  }>
+  $TonSha$_fun_isApprovedFirmware PROCREF:<{
+    257 PUSHINT
+    s3 PUSH
+    s0 s2 XCHG
+    1 PUSHINT
+    __tact_dict_get_int_int INLINECALLDICT
+    DUP
+    ISNULL
+    IFJMP:<{
+      DROP
+      FALSE
+    }>
+    __tact_not_null INLINECALLDICT
+  }>
+  $TonSha$_fun_getCounter PROCREF:<{
+    257 PUSHINT
+    s0 s2 PUSH2
+    s3 s3 XCHG2
+    __tact_dict_get_int_int INLINECALLDICT
+    DUP
+    ISNULL
+    IFJMP:<{
+      DROP
+      0 PUSHINT
+    }>
+    __tact_not_null INLINECALLDICT
+  }>
+  $TonSha$_fun_getOwner PROCREF:<{
+    s3 PUSH
+  }>
+  $VerificationFailed$_constructor_hw_id_reason PROCINLINE:<{
+  }>
+  $VerificationPassed$_constructor_hw_id_counter PROCINLINE:<{
+  }>
+  %isAuthorized PROC:<{
+    $TonSha$_contract_load INLINECALLDICT
+    4 ROLL
+    $TonSha$_fun_isAuthorized INLINECALLDICT
+    4 1 BLKDROP2
+  }>
+  %isApprovedFirmware PROC:<{
+    $TonSha$_contract_load INLINECALLDICT
+    4 ROLL
+    $TonSha$_fun_isApprovedFirmware INLINECALLDICT
+    4 1 BLKDROP2
+  }>
+  %getCounter PROC:<{
+    $TonSha$_contract_load INLINECALLDICT
+    4 ROLL
+    $TonSha$_fun_getCounter INLINECALLDICT
+    4 1 BLKDROP2
+  }>
+  %getOwner PROC:<{
+    $TonSha$_contract_load INLINECALLDICT
+    $TonSha$_fun_getOwner INLINECALLDICT
+    4 1 BLKDROP2
+  }>
+  recv_internal PROC:<{
+    SWAP
+    CTOS
+    2 PUSHINT
+    SDSKIPFIRST
+    1 LDI
+    1 LDI
+    LDMSGADDR
+    OVER
+    s3 s4 XCHG
+    s6 s6 XCHG2
+    4 TUPLE
+    __tact_context SETGLOB
+    s0 s2 XCHG
+    __tact_context_sender SETGLOB
+    $TonSha$_contract_load INLINECALLDICT
+    s0 s5 XCHG
+    IFJMP:<{
+      5 BLKDROP
+    }>
+    0 PUSHINT
+    s4 PUSH
+    SBITS
+    DUP
+    31 GTINT
+    IF:<{
+      NIP
+      s0 s4 XCHG
+      32 LDU
+      s0 s5 XCHG
+    }>
+    OVER
+    3490704699 PUSHINT
+    EQUAL
+    IFJMP:<{
+      2DROP
+      s0 s3 XCHG
+      64 LDU
+      256 LDU
+      256 LDU
+      64 LDU
+      256 LDU
+      DROP
+      s5 PUSH
+      257 PUSHINT
+      s6 PUSH
+      1 PUSHINT
+      __tact_dict_get_int_int INLINECALLDICT
+      DUP
+      ISNULL
+      IF:<{
+        DROP
+        TRUE
+      }>ELSE<{
+        __tact_not_null INLINECALLDICT
+        0 EQINT
+      }>
+      IFJMP:<{
+        4 BLKDROP
+        1 PUSHINT
+        $VerificationFailed$_constructor_hw_id_reason INLINECALLDICT
+        NEWC
+        $VerificationFailed$_store_cell INLINECALLDICT
+        $global_emit INLINECALLDICT
+        s0 s0 s3 XCHG3
+        $TonSha$_contract_store INLINECALLDICT
+      }>
+      s7 PUSH
+      257 PUSHINT
+      s5 PUSH
+      1 PUSHINT
+      __tact_dict_get_int_int INLINECALLDICT
+      DUP
+      ISNULL
+      IF:<{
+        DROP
+        TRUE
+      }>ELSE<{
+        __tact_not_null INLINECALLDICT
+        0 EQINT
+      }>
+      IFJMP:<{
+        4 BLKDROP
+        2 PUSHINT
+        $VerificationFailed$_constructor_hw_id_reason INLINECALLDICT
+        NEWC
+        $VerificationFailed$_store_cell INLINECALLDICT
+        $global_emit INLINECALLDICT
+        s0 s0 s3 XCHG3
+        $TonSha$_contract_store INLINECALLDICT
+      }>
+      257 PUSHINT
+      s9 s(-1) s(-1) PUXCPU
+      s7 s(-1) PUXC
+      __tact_dict_get_int_int INLINECALLDICT
+      0 PUSHINT
+      OVER
+      ISNULL
+      NOT
+      IF:<{
+        DROP
+        __tact_not_null INLINECALLDICT
+      }>ELSE<{
+        NIP
+      }>
+      s2 s(-1) PUXC
+      LEQ
+      IFJMP:<{
+        4 BLKDROP
+        3 PUSHINT
+        $VerificationFailed$_constructor_hw_id_reason INLINECALLDICT
+        NEWC
+        $VerificationFailed$_store_cell INLINECALLDICT
+        $global_emit INLINECALLDICT
+        s0 s0 s3 XCHG3
+        $TonSha$_contract_store INLINECALLDICT
+      }>
+      s5 s6 XCHG
+      7 2 REVERSE
+      s6 s7 s8 PUXC2
+      s9 PUSH
+      $TonSha$_fun_computeDigest INLINECALLDICT
+      s0 s6 XCHG2
+      NEQ
+      IFJMP:<{
+        s5 POP
+        s0 s2 XCHG
+        4 PUSHINT
+        $VerificationFailed$_constructor_hw_id_reason INLINECALLDICT
+        NEWC
+        $VerificationFailed$_store_cell INLINECALLDICT
+        $global_emit INLINECALLDICT
+        s1 s3 s3 XCHG3
+        $TonSha$_contract_store INLINECALLDICT
+      }>
+      257 PUSHINT
+      s5 s0 s0 XC2PU
+      s5 s7 s(-2) PU2XC
+      __tact_dict_set_int_int INLINECALLDICT
+      s3 s5 XCHG2
+      $VerificationPassed$_constructor_hw_id_counter INLINECALLDICT
+      NEWC
+      $VerificationPassed$_store_cell INLINECALLDICT
+      $global_emit INLINECALLDICT
+      s2 s3 XCHG2
+      $TonSha$_contract_store INLINECALLDICT
+    }>
+    OVER
+    668197562 PUSHINT
+    EQUAL
+    IFJMP:<{
+      2DROP
+      s0 s3 XCHG
+      64 LDU
+      DROP
+      14534 PUSHINT
+      __tact_context_get_sender INLINECALLDICT
+      s4 PUSH
+      SDEQ
+      THROWANYIFNOT
+      257 PUSHINT
+      SWAP
+      TRUE
+      1 PUSHINT
+      __tact_dict_set_int_int INLINECALLDICT
+      s0 s0 s3 XCHG3
+      $TonSha$_contract_store INLINECALLDICT
+    }>
+    OVER
+    4048120377 PUSHINT
+    EQUAL
+    IFJMP:<{
+      2DROP
+      s0 s3 XCHG
+      256 LDU
+      DROP
+      14534 PUSHINT
+      __tact_context_get_sender INLINECALLDICT
+      s4 PUSH
+      SDEQ
+      THROWANYIFNOT
+      s1 s3 XCHG
+      257 PUSHINT
+      SWAP
+      TRUE
+      1 PUSHINT
+      __tact_dict_set_int_int INLINECALLDICT
+      s0 s3 XCHG2
+      $TonSha$_contract_store INLINECALLDICT
+    }>
+    OVER
+    791324172 PUSHINT
+    EQUAL
+    IFJMP:<{
+      2DROP
+      s0 s3 XCHG
+      64 LDU
+      DROP
+      14534 PUSHINT
+      __tact_context_get_sender INLINECALLDICT
+      s4 PUSH
+      SDEQ
+      THROWANYIFNOT
+      257 PUSHINT
+      SWAP
+      FALSE
+      1 PUSHINT
+      __tact_dict_set_int_int INLINECALLDICT
+      s0 s0 s3 XCHG3
+      $TonSha$_contract_store INLINECALLDICT
+    }>
+    s5 POP
+    0 EQINT
+    s0 s4 XCHG
+    33 LESSINT
+    s1 s4 XCHG
+    AND
+    IFJMP:<{
+      __tact_context_get_sender INLINECALLDICT
+          NEWC
+          x{42_} STSLICECONST // .storeUint(0x10, 6)
+          STSLICE          // .storeAddress(to)
+          0 PUSHINT        // 0
+          111 STUR         // .storeUint(0, 111)
+                           // 4 zeros for coins and 107 zeros for lt, fees, etc.
+          ENDC
+          66 PUSHINT       // SendRemainingValue | SendIgnoreErrors
+          SENDRAWMSG
+      s0 s0 s3 XCHG3
+      $TonSha$_contract_store INLINECALLDICT
+    }>
+    4 BLKDROP
+    130 THROW
+  }>
+  __tact_selector_hack PROC:<{
+    @atend @ 1 {
+            execute current@ context@ current!
+            {
+                // The core idea of this function is to save gas by avoiding unnecessary dict jump, when recv_internal/recv_external is called
+                // We want to extract recv_internal/recv_external from the dict and select needed function
+                // not by jumping to the needed function by it's index, but by using usual IF statements.
+                }END> b> // Close previous builder, now we have a cell of previous code on top of the stack
+                <{ // Start of the new code builder
+                    SETCP0
+                    // Swap the new code builder with the previous code, now we have previous code on top of the stack
+                    swap
+                    // Transform cell to slice and load first ref from the previous code, now we have the dict on top of the stack
+                    <s ref@
+                    // Extract the recv_internal from the dict
+                    dup 0 swap @procdictkeylen idict@ { "internal shortcut error" abort } ifnot
+                    swap
+                    // Delete the recv_internal from the dict
+                    0 swap @procdictkeylen idict- drop
+                    // Delete the recv_external from the dict (it's okay if it's not there)
+                    -1 swap @procdictkeylen idict- drop
+                    // Delete the __tact_selector_hack from the dict
+                    65535 swap @procdictkeylen idict- drop
+                    // Bring the code builder from the bottom of the stack
+                    // because if recv_external extraction is optional, and the number of elements on the stack is not fixed
+                    depth 1- roll
+                    // Swap with the dict from which we extracted recv_internal and (maybe) recv_external
+                    swap
+                    // Check if the dict is empty
+                    dup null?
+                    // Store a copy of this flag in the bottom of the stack
+                    dup depth 1- -roll
+                    {
+                        // If the dict is empty, just drop it (it will be null if it's empty)
+                        drop
+                    }
+                    {
+                        // If the dict is not empty, prepare continuation to be stored in c3
+                        <{
+                            // Save this dict as first ref in this continuation, it will be pushed in runtime by DICTPUSHCONST
+                            swap @procdictkeylen DICTPUSHCONST
+                            // Jump to the needed function by it's index
+                            DICTIGETJMPZ
+                            // If such key is not found, throw 11 along with the key as an argument
+                            11 THROWARG
+                        }> PUSHCONT
+                        // Store the continuation in c3
+                        c3 POP
+                    } cond
+                    // Function id is on top of the (runtime) stack
+                    DUP IFNOTJMP:<{
+                        // place recv_internal here
+                        DROP swap @addop
+                    }>
+                    // Bring back the flag, indicating if the dict is empty or not from the bottom of the stack
+                    depth 1- roll
+                    {
+                        // If the dict is empty, throw 11
+                        11 THROWARG
+                    }
+                    {
+                        // If the dict is not empty, jump to continuation from c3
+                        c3 PUSH JMPX
+                    } cond
+                }> b>
+            } : }END>c
+            current@ context! current!
+        } does @atend !
+  }>
+}END>c

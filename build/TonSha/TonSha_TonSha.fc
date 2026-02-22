@@ -1,0 +1,535 @@
+#pragma version =0.4.6;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+;; TonSha_TonSha.headers.fc
+;;
+;; Header files for TonSha
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_not_null
+forall X -> X __tact_not_null(X x) impure inline;
+
+;; __tact_context_get_sender
+slice __tact_context_get_sender() inline;
+
+;; __tact_dict_get_int_int
+int __tact_dict_get_int_int(cell d, int kl, int k, int vl) inline;
+
+;; __tact_dict_set_int_int
+(cell, ()) __tact_dict_set_int_int(cell d, int kl, int k, int v, int vl) inline;
+
+;; $VerificationPassed$_store
+builder $VerificationPassed$_store(builder build_0, (int, int) v) inline;
+
+;; $VerificationPassed$_store_cell
+cell $VerificationPassed$_store_cell((int, int) v, builder b) inline;
+
+;; $VerificationFailed$_store
+builder $VerificationFailed$_store(builder build_0, (int, int) v) inline;
+
+;; $VerificationFailed$_store_cell
+cell $VerificationFailed$_store_cell((int, int) v, builder b) inline;
+
+;; $TonSha$_store
+builder $TonSha$_store(builder build_0, (slice, cell, cell, cell) v) inline;
+
+;; $TonSha$_load
+(slice, ((slice, cell, cell, cell))) $TonSha$_load(slice sc_0) inline;
+
+;; $TonSha$init$_load
+(slice, ((slice))) $TonSha$init$_load(slice sc_0) inline;
+
+;; $TonSha$_contract_init
+(slice, cell, cell, cell) $TonSha$_contract_init(slice $owner) impure inline;
+
+;; $TonSha$_contract_load
+(slice, cell, cell, cell) $TonSha$_contract_load() impure inline;
+
+;; $TonSha$_contract_store
+() $TonSha$_contract_store((slice, cell, cell, cell) v) impure inline;
+
+;; $global_emit
+() $global_emit(cell $body) impure inline;
+
+;; $TonSha$_fun_computeDigest
+((slice, cell, cell, cell), int) $TonSha$_fun_computeDigest((slice, cell, cell, cell) $self, int $hw_id, int $fw_hash, int $ex_hash, int $counter) impure inline_ref;
+
+;; $TonSha$_fun_isAuthorized
+((slice, cell, cell, cell), int) $TonSha$_fun_isAuthorized((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref;
+
+;; $TonSha$_fun_isApprovedFirmware
+((slice, cell, cell, cell), int) $TonSha$_fun_isApprovedFirmware((slice, cell, cell, cell) $self, int $fw_hash) impure inline_ref;
+
+;; $TonSha$_fun_getCounter
+((slice, cell, cell, cell), int) $TonSha$_fun_getCounter((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref;
+
+;; $TonSha$_fun_getOwner
+((slice, cell, cell, cell), slice) $TonSha$_fun_getOwner((slice, cell, cell, cell) $self) impure inline_ref;
+
+;; $VerificationFailed$_constructor_hw_id_reason
+((int, int)) $VerificationFailed$_constructor_hw_id_reason(int $hw_id, int $reason) inline;
+
+;; $VerificationPassed$_constructor_hw_id_counter
+((int, int)) $VerificationPassed$_constructor_hw_id_counter(int $hw_id, int $counter) inline;
+
+
+;; TonSha_TonSha.stdlib.fc
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_child_contract_codes;
+global int __tact_randomized;
+
+int __tact_sha256(slice data) asm """
+
+            <{
+                <{ DUP SREFS }> PUSHCONT
+                <{ LDREFRTOS }> PUSHCONT
+                WHILE
+                DEPTH
+                HASHEXT_SHA256
+            }> PUSHCONT
+            1 1 CALLXARGS
+
+""";
+
+forall X -> X __tact_not_null(X x) impure inline {
+    throw_if(128, null?(x)); return x;
+}
+
+slice __tact_context_get_sender() inline {
+    return __tact_context_sender;
+}
+
+int __tact_dict_get_int_int(cell d, int kl, int k, int vl) inline {
+    var (r, ok) = idict_get?(d, kl, k);
+    if (ok) {
+        return r~load_int(vl);
+    } else {
+        return null();
+    }
+}
+
+(cell, ()) __tact_dict_set_int_int(cell d, int kl, int k, int v, int vl) inline {
+    if (null?(v)) {
+        var (r, ok) = idict_delete?(d, kl, k);
+        return (r, ());
+    } else {
+        return (idict_set_builder(d, kl, k, begin_cell().store_int(v, vl)), ());
+    }
+}
+
+builder $global_beginCell() impure asm """
+    NEWC
+""";
+
+() $global_cashback(slice $to) impure asm """
+    NEWC
+    x{42_} STSLICECONST // .storeUint(0x10, 6)
+    STSLICE          // .storeAddress(to)
+    0 PUSHINT        // 0
+    111 STUR         // .storeUint(0, 111)
+                     // 4 zeros for coins and 107 zeros for lt, fees, etc.
+    ENDC
+    66 PUSHINT       // SendRemainingValue | SendIgnoreErrors
+    SENDRAWMSG
+""";
+
+() $global_sendRawMessage(cell $msg, int $mode) impure asm """
+    SENDRAWMSG
+""";
+
+cell $Builder$_fun_endCell(builder $self) impure asm """
+    ENDC
+""";
+
+builder $Builder$_fun_storeRef(cell $cell, builder $self) impure asm """
+    STREF
+""";
+
+() $global_emit(cell $body) impure inline {
+    cell $c = $Builder$_fun_endCell($Builder$_fun_storeRef($body, store_uint($global_beginCell(), 15211807202738752817960438464513, 104)));
+    $global_sendRawMessage($c, 0);
+}
+
+slice $Cell$_fun_beginParse(cell $self) impure asm """
+    CTOS
+""";
+
+;; TonSha_TonSha.storage.fc
+;;
+;; Type: VerificationPassed
+;; Header: 0xeb9f1ed5
+;; TLB: verification_passed#eb9f1ed5 hw_id:uint64 counter:uint64 = VerificationPassed
+;;
+
+builder $VerificationPassed$_store(builder build_0, (int, int) v) inline {
+    var (v'hw_id, v'counter) = v;
+    build_0 = store_uint(build_0, 3953073877, 32);
+    build_0 = build_0.store_uint(v'hw_id, 64);
+    build_0 = build_0.store_uint(v'counter, 64);
+    return build_0;
+}
+
+cell $VerificationPassed$_store_cell((int, int) v, builder b) inline {
+    return $VerificationPassed$_store(b, v).end_cell();
+}
+
+((int, int)) $VerificationPassed$_constructor_hw_id_counter(int $hw_id, int $counter) inline {
+    return ($hw_id, $counter);
+}
+
+;;
+;; Type: VerificationFailed
+;; Header: 0x92a79d64
+;; TLB: verification_failed#92a79d64 hw_id:uint64 reason:uint8 = VerificationFailed
+;;
+
+builder $VerificationFailed$_store(builder build_0, (int, int) v) inline {
+    var (v'hw_id, v'reason) = v;
+    build_0 = store_uint(build_0, 2460458340, 32);
+    build_0 = build_0.store_uint(v'hw_id, 64);
+    build_0 = build_0.store_uint(v'reason, 8);
+    return build_0;
+}
+
+cell $VerificationFailed$_store_cell((int, int) v, builder b) inline {
+    return $VerificationFailed$_store(b, v).end_cell();
+}
+
+((int, int)) $VerificationFailed$_constructor_hw_id_reason(int $hw_id, int $reason) inline {
+    return ($hw_id, $reason);
+}
+
+;;
+;; Type: TonSha
+;; TLB: _ owner:address authorized_devices:dict<int, bool> approved_firmware:dict<int, bool> counters:dict<int, int> = TonSha
+;;
+
+builder $TonSha$_store(builder build_0, (slice, cell, cell, cell) v) inline {
+    var (v'owner, v'authorized_devices, v'approved_firmware, v'counters) = v;
+    build_0 = build_0.store_slice(v'owner);
+    build_0 = build_0.store_dict(v'authorized_devices);
+    var build_1 = begin_cell();
+    build_1 = build_1.store_dict(v'approved_firmware);
+    build_1 = build_1.store_dict(v'counters);
+    build_0 = store_builder_ref(build_0, build_1);
+    return build_0;
+}
+
+(slice, ((slice, cell, cell, cell))) $TonSha$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    var v'authorized_devices = sc_0~load_dict();
+    slice sc_1 = sc_0~load_ref().begin_parse();
+    var v'approved_firmware = sc_1~load_dict();
+    var v'counters = sc_1~load_dict();
+    return (sc_0, (v'owner, v'authorized_devices, v'approved_firmware, v'counters));
+}
+
+(slice, ((slice))) $TonSha$init$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    return (sc_0, (v'owner));
+}
+
+(slice, cell, cell, cell) $TonSha$_contract_load() impure inline {
+    slice $sc = get_data().begin_parse();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$TonSha$_load();
+    }
+    else {
+        (slice $owner) = $sc~$TonSha$init$_load();
+        $sc.end_parse();
+        return $TonSha$_contract_init($owner);
+    }
+}
+
+() $TonSha$_contract_store((slice, cell, cell, cell) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_int(true, 1);
+    b = $TonSha$_store(b, v);
+    set_data(b.end_cell());
+}
+
+;;
+;; Contract TonSha functions
+;;
+
+(slice, cell, cell, cell) $TonSha$_contract_init(slice $owner) impure inline {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = (null(), null(), null(), null());
+    $self'owner = $owner;
+    return ($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters);
+}
+
+((slice, cell, cell, cell), int) $TonSha$_fun_computeDigest((slice, cell, cell, cell) $self, int $hw_id, int $fw_hash, int $ex_hash, int $counter) impure inline_ref {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
+    builder $b = $global_beginCell();
+    $b = store_uint($b, $hw_id, 64);
+    $b = store_uint($b, $fw_hash, 256);
+    $b = store_uint($b, $ex_hash, 256);
+    $b = store_uint($b, $counter, 64);
+    slice $s = $Cell$_fun_beginParse($Builder$_fun_endCell($b));
+    var $fresh$ret_0 = __tact_sha256($s);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_0);
+}
+
+((slice, cell, cell, cell), int) $TonSha$_fun_isAuthorized((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
+    int $v = __tact_dict_get_int_int($self'authorized_devices, 257, $hw_id, 1);
+    if (null?($v)) {
+        var $fresh$ret_1 = false;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_1);
+    }
+    var $fresh$ret_2 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_2);
+}
+
+((slice, cell, cell, cell), int) $TonSha$_fun_isApprovedFirmware((slice, cell, cell, cell) $self, int $fw_hash) impure inline_ref {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
+    int $v = __tact_dict_get_int_int($self'approved_firmware, 257, $fw_hash, 1);
+    if (null?($v)) {
+        var $fresh$ret_3 = false;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_3);
+    }
+    var $fresh$ret_4 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_4);
+}
+
+((slice, cell, cell, cell), int) $TonSha$_fun_getCounter((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
+    int $v = __tact_dict_get_int_int($self'counters, 257, $hw_id, 257);
+    if (null?($v)) {
+        var $fresh$ret_5 = 0;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_5);
+    }
+    var $fresh$ret_6 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_6);
+}
+
+((slice, cell, cell, cell), slice) $TonSha$_fun_getOwner((slice, cell, cell, cell) $self) impure inline_ref {
+    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
+    var $fresh$ret_7 = $self'owner;
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_7);
+}
+
+;;
+;; Get methods of a Contract TonSha
+;;
+
+_ %isAuthorized(int $hw_id) method_id(104516) {
+    int $hw_id = $hw_id;
+    var self = $TonSha$_contract_load();
+    var res = self~$TonSha$_fun_isAuthorized($hw_id);
+    return res;
+}
+
+_ %isApprovedFirmware(int $fw_hash) method_id(118957) {
+    int $fw_hash = $fw_hash;
+    var self = $TonSha$_contract_load();
+    var res = self~$TonSha$_fun_isApprovedFirmware($fw_hash);
+    return res;
+}
+
+_ %getCounter(int $hw_id) method_id(103307) {
+    int $hw_id = $hw_id;
+    var self = $TonSha$_contract_load();
+    var res = self~$TonSha$_fun_getCounter($hw_id);
+    return res;
+}
+
+_ %getOwner() method_id(102025) {
+    var self = $TonSha$_contract_load();
+    var res = self~$TonSha$_fun_getOwner();
+    return res;
+}
+
+;;
+;; Routing of a Contract TonSha
+;;
+
+;; message opcode reader utility: only binary receivers
+;; Returns 32 bit message opcode, otherwise throws the "Invalid incoming message" exit code
+(slice, int) ~load_opcode_internal(slice s) asm( -> 1 0) "32 LDUQ 130 THROWIFNOT";
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    cs~skip_bits(2);
+    var msg_bounceable = cs~load_int(1);
+    var msg_bounced = cs~load_int(1);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounceable, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var ($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters) = $TonSha$_contract_load();
+    
+    ;; Handle bounced messages
+    if (msg_bounced) { return (); }
+    int op = 0;
+    int in_msg_length = slice_bits(in_msg);
+    if (in_msg_length >= 32) {
+        op = in_msg~load_uint(32);
+    }
+    ;; Receive VerifyReceipt message
+    if (op == 3490704699) {
+        var $msg'hw_id = in_msg~load_uint(64);
+        var $msg'fw_hash = in_msg~load_uint(256);
+        var $msg'ex_hash = in_msg~load_uint(256);
+        var $msg'counter = in_msg~load_uint(64);
+        var $msg'digest = in_msg~load_uint(256);
+        int $auth = __tact_dict_get_int_int($self'authorized_devices, 257, $msg'hw_id, 1);
+        if (( (null?($auth)) ? (true) : ((__tact_not_null($auth) == false)) )) {
+            $global_emit($VerificationFailed$_store_cell($VerificationFailed$_constructor_hw_id_reason($msg'hw_id, 1), begin_cell()));
+            $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+            return ();
+        }
+        int $fw = __tact_dict_get_int_int($self'approved_firmware, 257, $msg'fw_hash, 1);
+        if (( (null?($fw)) ? (true) : ((__tact_not_null($fw) == false)) )) {
+            $global_emit($VerificationFailed$_store_cell($VerificationFailed$_constructor_hw_id_reason($msg'hw_id, 2), begin_cell()));
+            $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+            return ();
+        }
+        int $last = __tact_dict_get_int_int($self'counters, 257, $msg'hw_id, 257);
+        int $lastVal = 0;
+        if ((~ null?($last))) {
+            $lastVal = __tact_not_null($last);
+        }
+        if (($msg'counter <= $lastVal)) {
+            $global_emit($VerificationFailed$_store_cell($VerificationFailed$_constructor_hw_id_reason($msg'hw_id, 3), begin_cell()));
+            $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+            return ();
+        }
+        int $expected = ($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)~$TonSha$_fun_computeDigest($msg'hw_id, $msg'fw_hash, $msg'ex_hash, $msg'counter);
+        if (($expected != $msg'digest)) {
+            $global_emit($VerificationFailed$_store_cell($VerificationFailed$_constructor_hw_id_reason($msg'hw_id, 4), begin_cell()));
+            $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+            return ();
+        }
+        $self'counters~__tact_dict_set_int_int(257, $msg'hw_id, $msg'counter, 257);
+        $global_emit($VerificationPassed$_store_cell($VerificationPassed$_constructor_hw_id_counter($msg'hw_id, $msg'counter), begin_cell()));
+        $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+        return ();
+    }
+    
+    ;; Receive AuthorizeDevice message
+    if (op == 668197562) {
+        var $msg'hw_id = in_msg~load_uint(64);
+        throw_unless(14534, ( equal_slices_bits(__tact_context_get_sender(), $self'owner) ));
+        $self'authorized_devices~__tact_dict_set_int_int(257, $msg'hw_id, true, 1);
+        $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+        return ();
+    }
+    
+    ;; Receive ApproveFirmware message
+    if (op == 4048120377) {
+        var $msg'fw_hash = in_msg~load_uint(256);
+        throw_unless(14534, ( equal_slices_bits(__tact_context_get_sender(), $self'owner) ));
+        $self'approved_firmware~__tact_dict_set_int_int(257, $msg'fw_hash, true, 1);
+        $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+        return ();
+    }
+    
+    ;; Receive RevokeDevice message
+    if (op == 791324172) {
+        var $msg'hw_id = in_msg~load_uint(64);
+        throw_unless(14534, ( equal_slices_bits(__tact_context_get_sender(), $self'owner) ));
+        $self'authorized_devices~__tact_dict_set_int_int(257, $msg'hw_id, false, 1);
+        $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+        return ();
+    }
+    
+    ;; Receive empty message
+    if ((op == 0) & (in_msg_length <= 32)) {
+        $global_cashback(__tact_context_get_sender());
+        $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
+        return ();
+    }
+    ;; Throw if not handled
+    throw(130);
+}
+
+
+() __tact_selector_hack_asm() impure asm """
+@atend @ 1 {
+        execute current@ context@ current!
+        {
+            // The core idea of this function is to save gas by avoiding unnecessary dict jump, when recv_internal/recv_external is called
+            // We want to extract recv_internal/recv_external from the dict and select needed function
+            // not by jumping to the needed function by it's index, but by using usual IF statements.
+
+            }END> b> // Close previous builder, now we have a cell of previous code on top of the stack
+
+            <{ // Start of the new code builder
+                SETCP0
+                // Swap the new code builder with the previous code, now we have previous code on top of the stack
+                swap
+                // Transform cell to slice and load first ref from the previous code, now we have the dict on top of the stack
+                <s ref@
+
+                // Extract the recv_internal from the dict
+                dup 0 swap @procdictkeylen idict@ { "internal shortcut error" abort } ifnot
+                swap
+
+                // Delete the recv_internal from the dict
+                0 swap @procdictkeylen idict- drop
+                // Delete the recv_external from the dict (it's okay if it's not there)
+                -1 swap @procdictkeylen idict- drop
+                // Delete the __tact_selector_hack from the dict
+                65535 swap @procdictkeylen idict- drop
+
+                // Bring the code builder from the bottom of the stack
+                // because if recv_external extraction is optional, and the number of elements on the stack is not fixed
+                depth 1- roll
+                // Swap with the dict from which we extracted recv_internal and (maybe) recv_external
+                swap
+
+                // Check if the dict is empty
+                dup null?
+                // Store a copy of this flag in the bottom of the stack
+                dup depth 1- -roll
+                {
+                    // If the dict is empty, just drop it (it will be null if it's empty)
+                    drop
+                }
+                {
+                    // If the dict is not empty, prepare continuation to be stored in c3
+                    <{
+                        // Save this dict as first ref in this continuation, it will be pushed in runtime by DICTPUSHCONST
+                        swap @procdictkeylen DICTPUSHCONST
+                        // Jump to the needed function by it's index
+                        DICTIGETJMPZ
+                        // If such key is not found, throw 11 along with the key as an argument
+                        11 THROWARG
+                    }> PUSHCONT
+                    // Store the continuation in c3
+                    c3 POP
+                } cond
+
+                // Function id is on top of the (runtime) stack
+                DUP IFNOTJMP:<{
+                    // place recv_internal here
+                    DROP swap @addop
+                }>
+
+                // Bring back the flag, indicating if the dict is empty or not from the bottom of the stack
+                depth 1- roll
+                {
+                    // If the dict is empty, throw 11
+                    11 THROWARG
+                }
+                {
+                    // If the dict is not empty, jump to continuation from c3
+                    c3 PUSH JMPX
+                } cond
+            }> b>
+        } : }END>c
+        current@ context! current!
+    } does @atend !
+""";
+
+() __tact_selector_hack() method_id(65535) {
+    return __tact_selector_hack_asm();
+}
