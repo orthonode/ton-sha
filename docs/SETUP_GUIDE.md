@@ -114,7 +114,7 @@ npx blueprint run checkState --testnet
 # Expected output:
 # Device authorized: true
 # Firmware approved: true
-# Counter on-chain: 1
+# Counter on-chain: 2
 ```
 
 If you see those values, your environment is fully set up and connected to the live contract.

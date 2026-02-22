@@ -11,7 +11,7 @@ TON-SHA is live on TON testnet with all four gates verified on-chain. The contra
 **What exists today:**
 - Tact smart contract with four-gate verification
 - TypeScript SDK for deploy, authorize, approve, and verify
-- Live testnet deployment with 4+ on-chain transactions
+- Live testnet deployment with 20+ on-chain transactions
 - Full documentation suite
 
 **What does not exist yet:**
@@ -97,7 +97,7 @@ TON-SHA is live on TON testnet with all four gates verified on-chain. The contra
 
 - [ ] Build an on-chain agent registry — map verified `hw_id` to agent addresses
 - [ ] Integrate with ton-analyst and other TON agent frameworks
-- [ ] Apply for TON Ecosystem grant
+- TON Fast Grants submission — Feb 2026 (in progress)
 - [ ] Publish case study with first DePIN project integration
 
 ### 3.4 Cross-Chain

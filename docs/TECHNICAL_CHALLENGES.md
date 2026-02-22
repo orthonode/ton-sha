@@ -83,7 +83,23 @@ const bits = cell.bits.subbuffer(0, cell.bits.length);
 const digest = BigInt('0x' + (await sha256(bits)).toString('hex'));
 ```
 
-This was confirmed empirically: the resulting digest `e1e5de5317ac5e0b...` matched the on-chain computation and Gate 4 passed.
+This was confirmed empirically: the resulting digest `e1e5de5317ac5e0b...` matched the on-chain computation and Gate 4 passed for counter=1.
+
+**Recurrence at counter=2:** The same issue resurfaced when `nextCounter` was 2. `subbuffer` returned null for that specific call, causing `sha256(null)` to hash an empty buffer silently — producing a wrong digest and failing Gate 4 again with no error message. The fix was to add an explicit null check with a `slice.loadUint` fallback:
+
+```typescript
+const sub = cell.bits.subbuffer(0, totalBits);
+if (sub) {
+    sub.copy(buf);
+} else {
+    const slice = cell.beginParse();
+    for (let i = 0; i < totalBytes; i++) {
+        buf[i] = slice.loadUint(Math.min(8, totalBits - i * 8));
+    }
+}
+```
+
+After this fix, counter advanced from 1 → 2 and all four gates confirmed passing.
 
 ---
 
@@ -140,6 +156,7 @@ This was confirmed empirically: the resulting digest `e1e5de5317ac5e0b...` match
 | File corruption | Heredoc shell limits | Write files externally |
 | Address checksum | EQ/kQ format mismatch | Copy addresses verbatim |
 | Digest mismatch | Wrong SHA-256 input | Hash raw cell bits |
+| Gate 4 fails at counter=2 | `subbuffer` returns null silently | Add `slice.loadUint` fallback |
 | npm permissions | System Node + root dirs | nvm + home prefix |
 | Blueprint command | Docs outdated | Use `create` not `init` |
 | Missing package.json | Blueprint doesn't create it | `npm init -y` first |

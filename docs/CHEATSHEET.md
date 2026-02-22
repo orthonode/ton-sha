@@ -33,6 +33,9 @@ npx blueprint run checkOwner --testnet
 
 # Approve firmware + verify receipt (skip authorize)
 npx blueprint run approveAndVerify --testnet
+
+# Single-command four-scenario demo (rogue agent, register, verify, replay)
+npx blueprint run agentDemo --testnet
 ```
 
 ---

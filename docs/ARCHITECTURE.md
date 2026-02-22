@@ -49,8 +49,21 @@ const cell = beginCell()
     .storeUint(counter, 64)
     .endCell();
 
-const bits = cell.bits.subbuffer(0, cell.bits.length);
-const digest = BigInt('0x' + (await sha256(bits)).toString('hex'));
+// subbuffer can return null for certain bit alignments — use safe pattern
+const totalBits = cell.bits.length;
+const totalBytes = Math.ceil(totalBits / 8);
+const buf = Buffer.alloc(totalBytes);
+const sub = cell.bits.subbuffer(0, totalBits);
+if (sub) {
+    sub.copy(buf);
+} else {
+    const slice = cell.beginParse();
+    for (let i = 0; i < totalBytes; i++) {
+        const bitsLeft = totalBits - i * 8;
+        buf[i] = slice.loadUint(Math.min(8, bitsLeft));
+    }
+}
+const digest = BigInt('0x' + (await sha256(buf)).toString('hex'));
 ```
 
 The cell must be packed in exactly this order and field width. The contract packs identically before computing its expected digest. Any deviation causes Gate 4 to fail.

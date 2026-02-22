@@ -54,7 +54,7 @@ All four gates must pass. Failure at any gate emits `VerificationFailed { hw_id,
 |----------|------|
 | Contract | [`kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO`](https://testnet.tonscan.org/address/kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO) |
 | Network | TON Testnet |
-| Gates Verified | All four — counter on-chain = 1 |
+| Gates Verified | All four — counter on-chain = 2 |
 
 ---
 
@@ -117,6 +117,7 @@ scripts/
   fullDemo.ts           # End-to-end: authorize → approve → verify
   checkState.ts         # Read on-chain state via getters
   checkOwner.ts         # Verify owner address
+  agentDemo.ts          # Single-command four-scenario demo (grant submission)
 
 build/
   TonSha/
@@ -130,7 +131,7 @@ docs/
   THREAT_MODEL.md       # Security assumptions and attack surface
   TECHNICAL_CHALLENGES.md # Engineering challenges overcome
   ROADMAP.md            # Phase 1 and Phase 2 plans
-  CAST_CHEATSHEET.md    # Quick reference for interactions
+  CHEATSHEET.md    # Quick reference for interactions
 ```
 
 ---
