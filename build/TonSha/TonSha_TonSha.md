@@ -1,6 +1,6 @@
 # Tact compilation report
 Contract: TonSha
-BoC Size: 1293 bytes
+BoC Size: 1281 bytes
 
 ## Structures (Structs and Messages)
 Total structures: 20

@@ -105,19 +105,23 @@ npx blueprint build
 
 ---
 
-## Step 8 — Verify Installation
-
-Check the live deployed contract without any wallet interaction:
+## Step 8 — Quick Test Commands
 
 ```bash
+# Check live contract state
 npx blueprint run checkState --testnet
-# Expected output:
-# Device authorized: true
-# Firmware approved: true
-# Counter on-chain: 2
+
+# Run complete four-scenario demo  
+npx blueprint run agentDemo --testnet
+
+# Quick end-to-end demo
+npx blueprint run fullDemo --testnet
+
+# Deploy your own instance
+npx blueprint run deployTonSha --testnet
 ```
 
-If you see those values, your environment is fully set up and connected to the live contract.
+All scripts use the live testnet contract at `kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP`.
 
 ---
 

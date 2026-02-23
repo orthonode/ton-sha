@@ -9,12 +9,13 @@
 The reference deployment is already live on TON testnet:
 
 ```
-Address: kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO
+Address: kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP
 Network: TON Testnet
 Owner:   EQC4J5GXJfu-a1zegwbILPPhQ6xZozsgP8CDSSrv5TlWXnVs
+Status:  ✅ Production Ready (All 4 gates verified)
 ```
 
-Explorer: https://testnet.tonscan.org/address/kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO
+Explorer: https://testnet.tonscan.org/address/kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP
 
 ---
 

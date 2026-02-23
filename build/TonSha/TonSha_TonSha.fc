@@ -53,9 +53,6 @@ builder $TonSha$_store(builder build_0, (slice, cell, cell, cell) v) inline;
 ;; $global_emit
 () $global_emit(cell $body) impure inline;
 
-;; $TonSha$_fun_computeDigest
-((slice, cell, cell, cell), int) $TonSha$_fun_computeDigest((slice, cell, cell, cell) $self, int $hw_id, int $fw_hash, int $ex_hash, int $counter) impure inline_ref;
-
 ;; $TonSha$_fun_isAuthorized
 ((slice, cell, cell, cell), int) $TonSha$_fun_isAuthorized((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref;
 
@@ -262,55 +259,43 @@ builder $TonSha$_store(builder build_0, (slice, cell, cell, cell) v) inline {
     return ($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters);
 }
 
-((slice, cell, cell, cell), int) $TonSha$_fun_computeDigest((slice, cell, cell, cell) $self, int $hw_id, int $fw_hash, int $ex_hash, int $counter) impure inline_ref {
-    var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
-    builder $b = $global_beginCell();
-    $b = store_uint($b, $hw_id, 64);
-    $b = store_uint($b, $fw_hash, 256);
-    $b = store_uint($b, $ex_hash, 256);
-    $b = store_uint($b, $counter, 64);
-    slice $s = $Cell$_fun_beginParse($Builder$_fun_endCell($b));
-    var $fresh$ret_0 = __tact_sha256($s);
-    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_0);
-}
-
 ((slice, cell, cell, cell), int) $TonSha$_fun_isAuthorized((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref {
     var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
     int $v = __tact_dict_get_int_int($self'authorized_devices, 257, $hw_id, 1);
     if (null?($v)) {
-        var $fresh$ret_1 = false;
-        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_1);
+        var $fresh$ret_0 = false;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_0);
     }
-    var $fresh$ret_2 = __tact_not_null($v);
-    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_2);
+    var $fresh$ret_1 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_1);
 }
 
 ((slice, cell, cell, cell), int) $TonSha$_fun_isApprovedFirmware((slice, cell, cell, cell) $self, int $fw_hash) impure inline_ref {
     var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
     int $v = __tact_dict_get_int_int($self'approved_firmware, 257, $fw_hash, 1);
     if (null?($v)) {
-        var $fresh$ret_3 = false;
-        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_3);
+        var $fresh$ret_2 = false;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_2);
     }
-    var $fresh$ret_4 = __tact_not_null($v);
-    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_4);
+    var $fresh$ret_3 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_3);
 }
 
 ((slice, cell, cell, cell), int) $TonSha$_fun_getCounter((slice, cell, cell, cell) $self, int $hw_id) impure inline_ref {
     var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
     int $v = __tact_dict_get_int_int($self'counters, 257, $hw_id, 257);
     if (null?($v)) {
-        var $fresh$ret_5 = 0;
-        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_5);
+        var $fresh$ret_4 = 0;
+        return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_4);
     }
-    var $fresh$ret_6 = __tact_not_null($v);
-    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_6);
+    var $fresh$ret_5 = __tact_not_null($v);
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_5);
 }
 
 ((slice, cell, cell, cell), slice) $TonSha$_fun_getOwner((slice, cell, cell, cell) $self) impure inline_ref {
     var (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)) = $self;
-    var $fresh$ret_7 = $self'owner;
-    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_7);
+    var $fresh$ret_6 = $self'owner;
+    return (($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters), $fresh$ret_6);
 }
 
 ;;
@@ -402,7 +387,12 @@ _ %getOwner() method_id(102025) {
             $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));
             return ();
         }
-        int $expected = ($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters)~$TonSha$_fun_computeDigest($msg'hw_id, $msg'fw_hash, $msg'ex_hash, $msg'counter);
+        builder $b = $global_beginCell();
+        $b = store_uint($b, $msg'hw_id, 64);
+        $b = store_uint($b, $msg'fw_hash, 256);
+        $b = store_uint($b, $msg'ex_hash, 256);
+        $b = store_uint($b, $msg'counter, 64);
+        int $expected = __tact_sha256($Cell$_fun_beginParse($Builder$_fun_endCell($b)));
         if (($expected != $msg'digest)) {
             $global_emit($VerificationFailed$_store_cell($VerificationFailed$_constructor_hw_id_reason($msg'hw_id, 4), begin_cell()));
             $TonSha$_contract_store(($self'owner, $self'authorized_devices, $self'approved_firmware, $self'counters));

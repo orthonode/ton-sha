@@ -15,7 +15,6 @@ PROGRAM{
   DECLPROC $TonSha$_contract_load
   DECLPROC $TonSha$_contract_store
   DECLPROC $global_emit
-  DECLPROC $TonSha$_fun_computeDigest
   DECLPROC $TonSha$_fun_isAuthorized
   DECLPROC $TonSha$_fun_isApprovedFirmware
   DECLPROC $TonSha$_fun_getCounter
@@ -159,25 +158,6 @@ PROGRAM{
         ENDC
     0 PUSHINT
         SENDRAWMSG
-  }>
-  $TonSha$_fun_computeDigest PROCREF:<{
-        NEWC
-    s1 s4 XCHG
-    64 STU
-    s1 s2 XCHG
-    256 STU
-    256 STU
-    64 STU
-        ENDC
-        CTOS
-                <{
-                    <{ DUP SREFS }> PUSHCONT
-                    <{ LDREFRTOS }> PUSHCONT
-                    WHILE
-                    DEPTH
-                    HASHEXT_SHA256
-                }> PUSHCONT
-                1 1 CALLXARGS
   }>
   $TonSha$_fun_isAuthorized PROCREF:<{
     257 PUSHINT
@@ -367,34 +347,47 @@ PROGRAM{
         s0 s0 s3 XCHG3
         $TonSha$_contract_store INLINECALLDICT
       }>
-      s5 s6 XCHG
-      7 2 REVERSE
-      s6 s7 s8 PUXC2
-      s9 PUSH
-      $TonSha$_fun_computeDigest INLINECALLDICT
-      s0 s6 XCHG2
+          NEWC
+      s5 s(-1) PUXC
+      64 STU
+      s1 s4 XCHG
+      256 STU
+      s1 s2 XCHG
+      256 STU
+      s1 s(-1) PUXC
+      64 STU
+          ENDC
+          CTOS
+                  <{
+                      <{ DUP SREFS }> PUSHCONT
+                      <{ LDREFRTOS }> PUSHCONT
+                      WHILE
+                      DEPTH
+                      HASHEXT_SHA256
+                  }> PUSHCONT
+                  1 1 CALLXARGS
+      ROT
       NEQ
       IFJMP:<{
-        s5 POP
-        s0 s2 XCHG
+        DROP
         4 PUSHINT
         $VerificationFailed$_constructor_hw_id_reason INLINECALLDICT
         NEWC
         $VerificationFailed$_store_cell INLINECALLDICT
         $global_emit INLINECALLDICT
-        s1 s3 s3 XCHG3
+        s0 s0 s3 XCHG3
         $TonSha$_contract_store INLINECALLDICT
       }>
       257 PUSHINT
-      s5 s0 s0 XC2PU
-      s5 s7 s(-2) PU2XC
+      s6 s0 s0 XC2PU
+      s3 s7 s(-2) PU2XC
       __tact_dict_set_int_int INLINECALLDICT
-      s3 s5 XCHG2
+      s0 s5 XCHG
       $VerificationPassed$_constructor_hw_id_counter INLINECALLDICT
       NEWC
       $VerificationPassed$_store_cell INLINECALLDICT
       $global_emit INLINECALLDICT
-      s2 s3 XCHG2
+      s0 s0 s3 XCHG3
       $TonSha$_contract_store INLINECALLDICT
     }>
     OVER

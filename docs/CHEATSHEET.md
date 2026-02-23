@@ -7,8 +7,9 @@
 ## Contract Address
 
 ```
-Testnet: kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO
-Explorer: https://testnet.tonscan.org/address/kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO
+Testnet: kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP
+Explorer: https://testnet.tonscan.org/address/kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP
+Gas Cost: 0.03 TON per operation (70% optimized)
 ```
 
 ---
@@ -22,8 +23,11 @@ npx blueprint build
 # Deploy to testnet
 npx blueprint run deployTonSha --testnet
 
-# Run full four-gate demo
-npx blueprint run fullDemo --testnet
+# Run agent trust demo (gas-optimized with state polling)
+npx blueprint run agentTrustDemo --testnet
+
+# Run full four-scenario demo
+npx blueprint run agentDemo --testnet
 
 # Check on-chain state
 npx blueprint run checkState --testnet
@@ -34,8 +38,8 @@ npx blueprint run checkOwner --testnet
 # Approve firmware + verify receipt (skip authorize)
 npx blueprint run approveAndVerify --testnet
 
-# Single-command four-scenario demo (rogue agent, register, verify, replay)
-npx blueprint run agentDemo --testnet
+# Single receipt verification
+npx blueprint run verifyReceipt --testnet
 ```
 
 ---

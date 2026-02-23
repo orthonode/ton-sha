@@ -19,6 +19,66 @@ TON-SHA is open-source infrastructure. Contributions are welcome — bug reports
 
 ---
 
+## Development Workflow
+
+### Testing Your Changes
+
+```bash
+# Build the contract
+npx blueprint build
+
+# Test against live contract
+npx blueprint run agentDemo --testnet
+
+# Test individual components
+npx blueprint run checkState --testnet
+npx blueprint run fullDemo --testnet
+```
+
+### Code Style
+
+- Use TypeScript for all scripts
+- Follow existing naming conventions (camelCase for variables, PascalCase for types)
+- Add comments for complex logic
+- Keep functions focused and small
+
+---
+
+## Project Structure
+
+```
+contracts/     # Tact smart contracts
+scripts/       # TypeScript interaction scripts
+docs/          # Documentation
+build/         # Generated contract bindings (auto-generated)
+```
+
+---
+
+## Submitting Changes
+
+1. Create a descriptive pull request
+2. Include test results in the description
+3. Reference any relevant issues
+4. Ensure all scripts work with the live testnet contract
+
+---
+
+## Security Considerations
+
+- Never commit private keys or testnet credentials
+- Use testnet for all testing
+- Report security vulnerabilities privately
+- Review contract changes carefully
+
+---
+
+## Questions?
+
+- Open an issue for bugs or feature requests
+- Check [docs/](docs/) for technical details
+- Review existing issues before creating new ones
+
 ## Types of Contributions
 
 ### Bug Reports

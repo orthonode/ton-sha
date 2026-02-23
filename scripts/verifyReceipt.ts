@@ -1,4 +1,4 @@
-import { toNano, beginCell, Address } from '@ton/core';
+import { toNano, Address, beginCell } from '@ton/core';
 import { TonSha } from '../build/TonSha/TonSha_TonSha';
 import { NetworkProvider } from '@ton/blueprint';
 import { sha256 } from '@ton/crypto';
@@ -17,12 +17,16 @@ async function computeDigest(hw_id: bigint, fw_hash: bigint, ex_hash: bigint, co
         .storeUint(counter, 64)
         .endCell();
 
-    const hash = await sha256(cell.bits.subbuffer(0, cell.bits.length)!);
-    return BigInt('0x' + hash.toString('hex'));
+    const slice = cell.beginParse();
+    const bytes = slice.loadBuffer(80);
+    const hash = await sha256(bytes);
+    return BigInt("0x" + hash.toString("hex"));
 }
 
+const CONTRACT_KQ = "kQBVqAhPv_ANWm0hfjJdLnQmvvC8_rQ_NEryVX3uFOUF05OP";
+
 export async function run(provider: NetworkProvider) {
-    const contractAddress = Address.parse('kQA2fMBzpJ8yOUtSTj8HAB2q1U37uDRoHNBRFqPbGFaBLvDO');
+    const contractAddress = Address.parse(CONTRACT_KQ);
 
     const tonSha = provider.open(TonSha.fromAddress(contractAddress));
 

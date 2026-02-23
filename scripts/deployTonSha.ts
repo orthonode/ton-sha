@@ -7,20 +7,22 @@ export async function run(provider: NetworkProvider) {
 
     const tonSha = provider.open(await TonSha.fromInit(owner));
 
+    console.log('Deploying to:', tonSha.address.toString());
+
     await tonSha.send(
         provider.sender(),
         {
-            value: toNano('0.05'),
+            value: toNano('0.2'),  // increased from 0.05 — testnet needs more gas
         },
         null,
     );
 
-    await provider.waitForDeploy(tonSha.address);
+    // Wait up to 60 seconds, checking every 2 seconds
+    await provider.waitForDeploy(tonSha.address, 30, 2000);
 
     console.log('✅ TonSha deployed at:', tonSha.address.toString());
     console.log('Owner:', owner.toString());
 
-    // Verify owner getter works
     const contractOwner = await tonSha.getGetOwner();
     console.log('Contract owner confirmed:', contractOwner.toString());
 }

@@ -11,7 +11,9 @@ TON-SHA is live on TON testnet with all four gates verified on-chain. The contra
 **What exists today:**
 - Tact smart contract with four-gate verification
 - TypeScript SDK for deploy, authorize, approve, and verify
-- Live testnet deployment with 20+ on-chain transactions
+- Live testnet deployment with 100+ on-chain transactions
+- Gas-optimized operations (0.03 TON per operation)
+- Agent Trust SDK with state consistency polling
 - Full documentation suite
 
 **What does not exist yet:**
